@@ -9,6 +9,7 @@ pygame.init()
 # Set Display
 surface = pygame.display.set_mode(size=(1920//2, 1080//2))
 
+# Set up text for score 
 text = pygame.font.SysFont("Comic Sans MS", 30)
 
 # Also Works
@@ -17,15 +18,19 @@ text = pygame.font.SysFont("Comic Sans MS", 30)
 # Hide the mouse so its just a dot
 pygame.mouse.set_visible(False)
 
-test = 0
+# Initialize variables
 timer = time.time()
 xpos = randrange(50, 700)
 ypos = randrange(50, 450)
 score = 0
+miss = 0
+accuracy = 0
 
 
 # Main Body Of Program
 while True:
+
+    #Get keyboard and mouse input
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -37,9 +42,12 @@ while True:
                 timer = time.time()
                 xpos = randrange(50, 700)
                 ypos = randrange(50, 450)
-        
-    # Add else statement for when you miss??
+                accuracy = 100 * (score / (score + miss))
+            else:
+                miss += 1
+                accuracy = 100 * (score / (score + miss))
     
+
     mouse = pygame.mouse.get_pos()
     surface.fill((0,0,0))
     pygame.draw.circle(surface, (255,255,255), mouse, 5)
@@ -53,6 +61,7 @@ while True:
         ypos = randrange(50, 450)
 
     surface.blit(text.render(f"Score: {score}", True, (255,255,255)), (0,0))
+    surface.blit(text.render(f"Accuracy: {accuracy}%", True, (255,255,255)), (200,0))
 
     # Update display
     pygame.display.update()
